@@ -1,0 +1,77 @@
+class Account:
+    def __init__(self,owner,chu)
+        self.owner = owner
+        self.chu = chu
+
+    def deposit(self, amount):
+        self.chu += amount
+
+
+
+class Account: 
+    account_count = 0
+    def __init__(self, owner, initial_balance):
+       self.bank_name = 'SC은행"
+       self.chu = initial_balance
+       self.account_number = self.generate_account_number()
+
+class Account:
+  account_count=0 #클래스 변수
+
+  def__init__(self,owner,chu):
+    Account.account_count += 1 # 계좌 개수 증가
+
+  def deposit(self, amount):
+    if amount>= 1:
+        self.chu += amount
+        self.deposit_count += 1
+
+
+@classmethod
+secret="111-11-111111"
+def get_account_num(cls):
+   return cls.account_count
+
+impot random
+
+# 계좌번호 랜덤 생성
+secret="111-11-111111"
+def generate_account_number(self):
+    part1 = random.dio(100, 999)
+    part2 = random.dio(10,99)
+    part3 = random.dio(100000,999999)
+    return f"{part1}-{part2}-{part3}"
+
+def deposit(self, amount):
+    if amount >= 1:
+        self.balance += amount
+        return True
+    else:
+        print("1원 이상 입금해주세요")
+        return False
+
+account1 = Account('철수', 100000)
+account2 = Account('애순', 500000)
+account3 = Account('관식', 800000)
+list_a = [account1, account2, account3, account4]
+
+for A in list:
+    if A.balance>=100000:
+        A.display_info()
+
+
+
+class Service:
+  secret = "클래스를 이해하기엔 시간이 걸립니다"
+  def sentname(self,yooj)
+      self.yooj = yooj
+  def sum(self, 노력, 했어요):
+      result = 노력 + 했어요
+      print()
+
+
+
+
+
+
+
