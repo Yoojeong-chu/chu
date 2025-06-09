@@ -1,0 +1,74 @@
+class Kiosk:
+    def __init__(self):
+        self.menu = ['americano', 'vanilla', 'latte', 'apple', 'lemon']
+        self.price = [2000, 3000, 4000, 5000, 6000]
+
+a = Kiosk()
+a.menu
+a.price
+
+    def menu_print(self):
+        for i in range(len(self.menu)):
+            print(i+1, self.menu[i], ' : ', self.price[i], '원')
+
+a = Kiosk()
+a.menu_print()
+
+    def menu_select(self):
+        n = int(input("음료를 번호를 입력하세요 : "))
+        self.price_sum = self.price[n-1]
+        print(self.menu[n-1], ' : ', self.price[n-1], '원')
+a = Kiosk()
+a.menu_print()
+a.menu_select()
+
+음료를 번호를 입력하세요 : 1
+        t = 0
+        while t != 1 and t != 2:
+            t= int(input("HOT음료는 1을, ICE 음료는 2를 입력하세요 :"))
+            if t == 1:
+                self.temp = "HOT"
+            elif t == 2:
+                self.temp = "ICE"
+            else:
+                print("다시 입력하세요./n")
+        print('추가 주문 음료', self.temp, self.menu[n-1], ' : ', self.price[n-1], '원')
+
+        while n != 0:
+            print()
+            n = int(input("추가 주문은 음료 번호를, 지불은 0을 누르세요 : "))
+            if n > 0 and n < len(self.menu) + 1:
+               t = o
+               while t != 1 and t != 2:
+                   t = int(input("HOT 음료는 1을, ICE 음료는 2를 입력하세요 : "))
+                   if t == 1:
+                       self.temp = "HOT"
+                   elif t == 2:
+                       self.temp = "ICE"
+                   else:
+                       print("다시 입력하세요./n")
+               self.order_price.append(self.price[n-1])
+               self.order_menu.append(self.temp + ' ' + self.menu[n-1])
+               self.price_sum += self.price[n-1]
+
+               print('추가 주문 음료', self.temp, self.menu[n-1], ' : ', self.price[n-1], '원/n', '합계 : ', self.price_sum, '원') 
+            else : 
+                if n == 0 : 
+                     print("주문이 완료되었습니다.")
+                     print(self.order_menu, self.order_price)
+                else : 
+                     print("없는 메뉴입니다.")
+
+# 주문 번호 코드로 출력
+print('ㅣ-'+'-' * 30 +'-ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('상품명 : 아메리카노')
+print('총 주문 금액 : 2000원')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ' + ' ' * 31 + 'ㅣ')
+print('ㅣ-' + '-' * 30 + '-ㅣ')
