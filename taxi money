@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('trip.csv')
+
+df.head()
+
+df.info()
+
+df.describe()
+
+df = pd.read_csv('trip.csv')
+
+df['passenger_count'] = df['passenger_count'].fillna(df['passenger_count'].mean())
+
+df = df.dropna(subset=['passenger_count', 'trip_distance', 'fare_amount', 'tolls_amount'])
+
+df['payment_type'] = df['payment_type'].fillna(df['payment_type'].mode()[0])
+
+for col in ['passenger_count', 'trip_distance', 'tolls_amount', 'total_amount']
+
+df.insa().sum()
