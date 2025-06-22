@@ -1,0 +1,27 @@
+import pandas as pd
+
+df = pd.read_csv('cars.csv')
+df2 = pd.read_csv('brand.csv')
+
+
+df['brand'] = df['title'].str.split().str[0]
+merged = pd.merge(df, df2, on='brand', how='left')
+
+
+for col in ['Engine', 'Emission Class']:
+    le = LabelEncoder()
+    merged[col] = le.fit_transform(merged[col].astype(str))
+
+
+merged['Service history'] = merged['Service history'].fillna('Unknown')
+merged = merged[merged.isnull().sum(axis=1) < 2]
+
+
+num_cols = merged.select_dtypes(include=['int64', 'float64']).columns
+scaler = StandardScaler()
+merged[num_cols] = scaler.fit_transform(merged[num_cols])
+
+
+pca = PCA(n_components=0.7)
+pca_result = pca.fit_transform(merged[num_cols])
+print(f"PCA 주성분 개수: {pca.n_components_}")
