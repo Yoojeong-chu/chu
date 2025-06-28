@@ -1,0 +1,71 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+
+import matplotlib.pyplot as plt
+from geopy.distance import distance
+
+cc_df = pd.read_csv('fraud.csv')
+pd.set_option('display.max_columns', 50)
+
+drop_cols = ['merchant', 'first', 'last', 'street', 'city', 'state', 'zip', 
+             'job', 'trans_num', 'unix_time']
+cc_df.drop(columns=drop_cols, inplace=True)
+
+cc_df.dropna(inplace=True)
+
+Q1, Q3 = cc_df['amt'].quantile([0.25, 0.75])
+IQR = Q3 - Q1
+amt_min, amt_max = Q1 - 1.5 * IQR, Q3 + 1.5 * IQR
+cc_df = cc_df[(cc_df['amt'] >= amt_min) & (cc_df['amt'] <= amt_max)]
+
+amt_stats = cc_df.groupby('cc_num')['amt'].agg(['mean', 'std']).reset_index()
+cc_df = cc_df.merge(amt_stats, on='cc_num', how='left')
+cc_df['amt_z'] = (cc_df['amt'] - cc_df['mean']) / cc_df['std']
+cc_df.drop(['mean', 'std'], axis=1, inplace=True)
+
+cat_stats = cc_df.groupby(['cc_num', 'category'])['amt'].agg(['mean', 'std']).reset_index()
+cc_df = cc_df.merge(cat_stats, on=['cc_num', 'category'], how='left')
+cc_df['cat_amt_z'] = (cc_df['amt'] - cc_df['mean']) / cc_df['std']
+cc_df.drop(['mean', 'std'], axis=1, inplace=True)
+
+cc_df['hour'] = pd.to_datetime(cc_df['trans_date_trans_time']).dt.hour
+
+def hour_func(x):
+    if 6 <= x < 12:
+        return 'morning'
+    elif 12 <= x < 18:
+        return 'afternoon'
+    elif 18 <= x < 23:
+        return 'night'
+    else:
+        return 'evening'
+
+cc_df['hour_cat'] = cc_df['hour'].apply(hour_func)
+
+hour_cnt = cc_df.groupby(['cc_num', 'hour_cat'])['amt'].count().reset_index(name='hour_cnt')
+total_cnt = cc_df.groupby('cc_num')['amt'].count().reset_index(name='total_cnt')
+hour_cnt = hour_cnt.merge(total_cnt, on='cc_num')
+hour_cnt['hour_perc'] = (hour_cnt['hour_cnt'] / hour_cnt['total_cnt']) * 100
+cc_df = cc_df.merge(hour_cnt[['cc_num', 'hour_cat', 'hour_perc']], on=['cc_num', 'hour_cat'], how='left')
+
+cc_df['distance'] = cc_df.apply(
+    lambda x: distance((x['lat'], x['long']), (x['merch_lat'], x['merch_long'])).km, axis=1
+)
+dist_stats = cc_df.groupby('cc_num')['distance'].agg(['mean', 'std']).reset_index()
+cc_df = cc_df.merge(dist_stats, on='cc_num', how='left')
+cc_df['dist_z'] = (cc_df['distance'] - cc_df['mean']) / cc_df['std']
+
+cc_df.drop(['trans_date_trans_time', 'hour', 'hour_cat', 
+            'lat', 'long', 'merch_lat', 'merch_long', 
+            'mean', 'std', 'cc_num'], axis=1, inplace=True)
+
+cc_df['dob'] = pd.to_datetime(cc_df['dob']).dt.year
+
+
+cc_df = pd.get_dummies(cc_df, columns=['category'], drop_first=True)
+
+
+cc_df.info()
+print(cc_df.isnull().sum())
+cc_df.head()
